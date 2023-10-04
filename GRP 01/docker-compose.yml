@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: faculdade
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: api_node
+      MYSQL_USER: alex
+      MYSQL_PASSWORD: root
+    ports:
+      - "3308:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - mynetwork
+  web:
+    build: .
+    container_name: back
+    ports:
+      - "4000:4000"
+    networks:
+      - mynetwork
+    depends_on:
+      - db
+volumes:
+  dbdata:
+networks:
+  mynetwork:
