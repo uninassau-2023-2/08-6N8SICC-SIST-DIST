@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  mysqldb:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=atendimento
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+    container_name: db_sd
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - my-db:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - db_sd
+
+networks:
+  db_sd:
+
+volumes:
+  my-db:
