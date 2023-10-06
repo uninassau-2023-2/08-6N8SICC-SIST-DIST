@@ -1,0 +1,11 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "atendimento",
+    "host": "localhost",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  }
+}
