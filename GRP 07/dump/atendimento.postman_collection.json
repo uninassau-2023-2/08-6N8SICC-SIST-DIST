@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "e09a3b1d-f411-4116-b6b1-c6786439a733",
+		"name": "atendimento",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20851014"
+	},
+	"item": [
+		{
+			"name": "emitir senha sp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/emitir-senha-sp",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"emitir-senha-sp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "emitir-senha-sg",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/emitir-senha-sg",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"emitir-senha-sg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "emitir-senha-se",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/emitir-senha-se",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"emitir-senha-se"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "proxima-senha",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/proxima-senha",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"proxima-senha"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relatorio-diario",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/relatorio-diario",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"relatorio-diario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relatório-mensal",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/relatorio-mensal",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"relatorio-mensal"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
