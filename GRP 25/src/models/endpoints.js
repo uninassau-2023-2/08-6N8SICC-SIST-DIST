@@ -1,12 +1,10 @@
 
 const connection = require('../models/connection');
-const { DateTime } = require('luxon');
-
+//ajustar identação
 
 const insertSenhaSP = async () => {
     const prioridade = 'SP';
-    const data_get = new Date();
-    const data_emissao= data_get.toISOString().slice(0, 19).replace('T', ' ');
+
 
     const [result] = await connection.execute(
         'SELECT MAX(ordem) as maxOrdem FROM Senhas WHERE prioridade = ? AND DAY(data_emissao) = DAY(CURDATE())',
@@ -20,12 +18,12 @@ const insertSenhaSP = async () => {
 
     try {
         await connection.execute(
-            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, now(), ?)',
+            [prioridade, ordem]
         );
         await connection.execute(
-            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?,now(), ?)',
+            [prioridade, ordem]
         );
     } catch (error) {
         return error;
@@ -37,9 +35,6 @@ const insertSenhaSP = async () => {
 
 const insertSenhaSE = async () => {
     const prioridade = 'SE';
-    const data_get = new Date();
-    const data_emissao= data_get.toISOString().slice(0, 19).replace('T', ' ');
-
     const [result] = await connection.execute(
         'SELECT MAX(ordem) as maxOrdem FROM Senhas WHERE prioridade = ? AND DAY(data_emissao) = DAY(CURDATE())',
         [prioridade]
@@ -52,12 +47,12 @@ const insertSenhaSE = async () => {
 
     try {
         await connection.execute(
-            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, now(), ?)',
+            [prioridade,  ordem]
         );
         await connection.execute(
-            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?,now(), ?)',
+            [prioridade, ordem]
         );
     } catch (error) {
         return error;
@@ -70,8 +65,7 @@ const insertSenhaSE = async () => {
 
 const insertSenhaSG = async () => {
     const prioridade = 'SG';
-    const data_get = new Date();
-    const data_emissao= data_get.toISOString().slice(0, 19).replace('T', ' ');
+
 
     const [result] = await connection.execute(
         'SELECT MAX(ordem) as maxOrdem FROM Senhas WHERE prioridade = ? AND DAY(data_emissao) = DAY(CURDATE())',
@@ -85,12 +79,12 @@ const insertSenhaSG = async () => {
 
     try {
         await connection.execute(
-            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO Senhas (prioridade, data_emissao, ordem) VALUES (?, now(), ?)',
+            [prioridade, ordem]
         );
         await connection.execute(
-            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?, ?, ?)',
-            [prioridade, data_emissao, ordem]
+            'INSERT INTO FilaTemp (prioridade, data_emissao, ordem) VALUES (?,now(), ?)',
+            [prioridade, ordem]
         );
     } catch (error) {
         return error;
@@ -102,30 +96,19 @@ const insertSenhaSG = async () => {
 
 const atendido = async () => {
     const guiche = '01';
-    const date_get = DateTime.now().setZone('America/Sao_Paulo');
-    const date_now = date_get.toFormat('yyyy-MM-dd HH:mm:ss');
-    
     const result = await connection.execute(
-        'SELECT DATE_FORMAT(data_atendimento, "%Y-%m-%d %H:%i:%s") AS formatted_date FROM DataTemp'
+        'SELECT data_atendimento FROM DataTemp'
     );
-    
-    const formattedTimestamp = result[0][0].formatted_date; 
-    
-    const dateObject = new Date(formattedTimestamp); 
+    old_date=result[0][0].data_atendimento
+  
     
    
-    dateObject.setHours(dateObject.getHours() - 3);
-    
-    const oldTimestamp = dateObject.getTime(); 
-    const old_date = new Date(oldTimestamp).toISOString().slice(0, 19).replace('T', ' '); 
-    
-    console.log('formattedOldDate:', old_date, 'date_now:', date_now);
     await connection.execute(
         'UPDATE DataTemp SET data_atendimento = NOW()'
     );    
 
 
-    const [lastpResult] =await connection.execute(
+    const [lastpResult] = await connection.execute(
         'SELECT prioridade FROM DisplayTemp WHERE id_dpstemp = (SELECT MAX(id_dpstemp) FROM DisplayTemp) AND DAY(data_emissao) = DAY(CURDATE())'
         );
        
@@ -134,7 +117,7 @@ const atendido = async () => {
         let lastp = lastpResult[0] ? lastpResult[0].prioridade : null;
         let count = 0;
         let senhaAtendida;
-        while (count  <3 & !senhaAtendida) {
+        while (count < 3 & !senhaAtendida) {
             if (lastp === 'SP') {
                 const [seResult] = await connection.execute(
                     'SELECT * FROM FilaTemp WHERE prioridade = "SE" ORDER BY ordem LIMIT 1'
@@ -221,10 +204,10 @@ const atendido = async () => {
             'INSERT INTO DisplayTemp (prioridade,guiche, data_emissao, ordem) VALUES ( ?,? , ?, ?)',
             [prioridade1,guiche,data_emissao1,ordem1]
         );           
-    console.log([old_date,guiche,date_now,prioridade2,data_emissao2,ordem2]);
+    
     await connection.execute(
-      'UPDATE Senhas SET data_atendimento = ?,atendido = 1,guiche = ?,tempo_atendimento = ? WHERE prioridade = ? AND DATE(data_emissao) = DATE(?) AND ordem = ?',
-      [old_date,guiche,date_now,prioridade2,data_emissao2,ordem2]
+      'UPDATE Senhas SET data_atendimento = ?,atendido = 1,guiche = ?,tempo_atendimento = now() WHERE prioridade = ? AND DATE(data_emissao) = DATE(?) AND ordem = ?',
+      [old_date,guiche,prioridade2,data_emissao2,ordem2]
         
         );
         
@@ -253,8 +236,15 @@ const displayTemp = async () => {
 
 const getAll = async () =>{
 
-    const [test] = await connection.execute('SELECT * FROM Senhas');
-    return test;
+    const result = await connection.execute(
+        'SELECT data_atendimento FROM DataTemp'
+    );
+    
+    await connection.execute('UPDATE DataTemp SET data_atendimento = now()');
+    old_date1=result[0][0].data_atendimento
+    await connection.execute('UPDATE DataTemp SET data_atendimento = ?',
+    [old_date1]);
+  return old_date1  
 };
 
 const proximo = async () =>{
@@ -264,15 +254,33 @@ const proximo = async () =>{
 
 
     const [lastpResult] =await connection.execute(
-        'SELECT prioridade FROM DisplayTemp WHERE id_dpstemp = (SELECT MAX(id_dpstemp) FROM DisplayTemp) AND DAY(data_emissao) = DAY(CURDATE())'
+            `SELECT prioridade 
+            FROM DisplayTemp 
+            WHERE id_dpstemp = (
+                SELECT MAX(id_dpstemp) 
+                FROM DisplayTemp) AND
+                DAY(data_emissao) = DAY(CURDATE()
+            )`
         );
        
-       console.log(lastpResult)
+      
     
         let lastp = lastpResult[0] ? lastpResult[0].prioridade : null;
         let count = 0;
         let senhaAtendida;
         while (count  <3 & !senhaAtendida) {
+            if (lastp === null){
+                const [seResult] = await connection.execute(
+                    'SELECT * FROM FilaTemp WHERE prioridade = "SP  " ORDER BY ordem LIMIT 1'
+                );
+                count++;
+                console.log(seResult);
+                lastp = 'SE';
+                if (seResult.length > 0) {
+                    senhaAtendida = seResult[0];
+                } 
+                
+            }
             if (lastp === 'SP') {
                 const [seResult] = await connection.execute(
                     'SELECT * FROM FilaTemp WHERE prioridade = "SE" ORDER BY ordem LIMIT 1'
@@ -386,7 +394,10 @@ const relatorio = async (dia, mes, numeroRelatorio) => {
                 query = 'SELECT id, prioridade, data_emissao, guiche, ordem, CASE WHEN atendido = 1 THEN data_atendimento ELSE NULL END AS data_atendimento FROM Senhas WHERE DAY(data_emissao) = ? AND MONTH(data_emissao) = ?';
                 break;
             case '6':
-                query = ' SELECT AVG(tempo_atendimento_minutos) AS media_atendimento_minutos FROM (SELECT id, CASE WHEN atendido = 1 THEN TIMESTAMPDIFF(MINUTE, data_atendimento, tempo_atendimento) ELSE NULL END AS tempo_atendimento_minutos FROM Senhas WHERE DAY(data_emissao) = ? AND MONTH(data_emissao) = ?) AS subquery WHERE tempo_atendimento_minutos IS NOT NULL';
+                query = `SELECT AVG(TIMESTAMPDIFF(MINUTE, data_atendimento, tempo_atendimento)) AS media_atendimento_minutos 
+                FROM Senhas 
+                WHERE atendido = 1 AND DAY(data_emissao) = ? AND MONTH(data_emissao) = ?;
+                `;
                 break;
             default:
                 throw new Error('Número de relatório inválido.');

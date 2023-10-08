@@ -1,5 +1,5 @@
 const endpoints = require('../models/endpoints');
-
+//criar controles diferentes para cada freature cliente, relatorio e etc
 
 const getAll = async (req,res) => {
 

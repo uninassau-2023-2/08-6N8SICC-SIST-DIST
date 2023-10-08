@@ -2,6 +2,7 @@ version: "3.8"
 services:
   mysqldb:
     image: mysql:8.0
+    #command: --init-file /data/application/init.sql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=root
