@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  ul
+  br
+  p ULTIMA SENHA CHAMADA:
+    each result in results
+      li= '[SENHA: ' + result.senha + '] - [GICHE: ' + result.guiche + ']'
+      br
+      br
+      br
