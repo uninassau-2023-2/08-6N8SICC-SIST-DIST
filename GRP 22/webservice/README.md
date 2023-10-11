@@ -1,3 +1,3 @@
 # v1.0
 
-* Sistema de totem de senhas.
+* Sistema de totem de senhas!
