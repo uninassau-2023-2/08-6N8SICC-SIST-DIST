@@ -42,9 +42,11 @@ CREATE TABLE Senhas (
     atendido TINYINT DEFAULT 0,
     data_atendimento TIMESTAMP,
     tempo_atendimento TIMESTAMP
-    
+
 );
 
 insert INTO Agentes (guiche,nome_agente) values(01,'Jasé Chitsu');
 
 SET time_zone = 'America/Sao_Paulo';
+* Lucas Gabriel Melo da Silva - 01389830
+* Thiago Alexandre Cordeiro Vasconcelos  - 01288929
