@@ -1,5 +1,6 @@
 # Alunos
 
+* Davi Lima de Oliveira - 01359610
 * Guilherme Santos de Carvalho - 24009474
 * Hebert Alves da Silva -   01345522
 * Leonardo dos Santos Silva - 01355430
