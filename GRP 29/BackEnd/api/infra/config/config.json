@@ -1,0 +1,11 @@
+{
+  "development": {
+    "username": "aula",
+    "password": "aula",
+    "database": "atendimento",
+    "host": "172.17.0.1",
+    "port": 33062,
+    "dialect": "mysql",
+    "logging": false
+  }
+}

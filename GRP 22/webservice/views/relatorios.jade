@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  h1= title
+
+  h2 Relatório Diário
+  p Quantitativo geral das senhas emitidas: #{diario.quantidadeEmitidas}
+  p Quantitativo geral das senhas atendidas: #{diario.quantidadeAtendidas}
+  p Quantitativo das senhas emitidas por prioridade:
+    | SE: #{diario.prioridadeSE}
+    | SG: #{diario.prioridadeSG}
+    | SP: #{diario.prioridadeSP}
+  p Quantitativo das senhas atendidas por prioridade:
+    | SE: #{diario.atendidasSE}
+    | SG: #{diario.atendidasSG}
+    | SP: #{diario.atendidasSP}
+
+  h2 Relatório Mensal
+  p Quantitativo geral das senhas emitidas: #{mensal.quantidadeEmitidas}
+  p Quantitativo geral das senhas atendidas: #{mensal.quantidadeAtendidas}
+  p Quantitativo das senhas emitidas por prioridade:
+    | SE: #{mensal.prioridadeSE}
+    | SG: #{mensal.prioridadeSG}
+    | SP: #{mensal.prioridadeSP}
+  p Quantitativo das senhas atendidas por prioridade:
+    | SE: #{mensal.atendidasSE}
+    | SG: #{mensal.atendidasSG}
+    | SP: #{mensal.atendidasSP}
+
+  h2 Relatório Detalhado
+  table
+    tr
+      th Numeracao
+      th Tipo de Senha
+      th Data e Hora da Emissao
+      th Data e Hora do Atendimento
+      th Guiche Responsável pelo SA
+    each senha in detalhado
+      tr
+        td= senha.numeracao
+        td= senha.tipoSenha
+        td= senha.dataHoraEmissao
+        td= senha.dataHoraAtendimento
+        td= senha.guicheSA
+
+  h2 Relatório do TM (Tempo Médio)
+  p Tempo médio de atendimento: #{tm.tempoMedio} minutos

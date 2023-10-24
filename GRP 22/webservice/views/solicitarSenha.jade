@@ -1,0 +1,62 @@
+extends layout
+
+block content
+  h1 Solicitar Senha
+  form#solicitarSenhaForm(action='/access', method='POST')
+    //- label(for='timestamp') Timestamp:
+    //- input(type='text', id='timestamp', name='timestamp', value='2023-10-05 14:30:00')
+    //- br
+
+    //- label(for='hostname') Hostname:
+    //- input(type='text', id='hostname', name='hostname', value='example-hostname')
+    //- br
+
+    //- label(for='ip') IP:
+    //- input(type='text', id='ip', name='ip', value='10.0.2.15')
+    //- br
+
+    br
+    br
+    label(for='tipoSenha') Tipo de Senha:
+    br
+    br
+    button(type='button', name='tipoSenha', value='SE', onclick='enviarForm("SE")') Solicitar Senha SE
+    br
+    br
+    button(type='button', name='tipoSenha', value='SG', onclick='enviarForm("SG")') Solicitar Senha SG
+    br
+    br
+    button(type='button', name='tipoSenha', value='SP', onclick='enviarForm("SP")') Solicitar Senha SP
+
+  script.
+    // Função para enviar o formulário via AJAX
+    function enviarForm(tipoSenha) {
+      var formData = {
+        //- timestamp: document.getElementById('timestamp').value,
+        //- hostname: document.getElementById('hostname').value,
+        //- ip: document.getElementById('ip').value,
+        tipoSenha: tipoSenha
+      };
+
+      // Realiza uma requisição AJAX POST
+      fetch('/access', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        if (response.status === 201) {
+          console.log('Senha solicitada com sucesso!');
+          // Faça o que desejar após o sucesso
+        } else {
+          console.error('Erro ao solicitar senha: ' + response.status);
+          // Lide com o erro conforme necessário
+        }
+      })
+      .catch(error => {
+        console.error('Erro na requisição AJAX: ' + error);
+        // Lide com o erro conforme necessário
+      });
+    }

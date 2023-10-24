@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+// Importa as dependências do módulo
+var app = require('../app');
+var debug = require('debug')('webservice:server');
+var http = require('http');
+
+// Obtém a porta do ambiente e a configura no Express
+var port = normalizePort(process.env.PORT || '8081');
+app.set('port', port);
+
+// Cria o servidor HTTP
+var server = http.createServer(app);
+
+// Escuta na porta fornecida em todas as interfaces de rede
+server.listen(port, '127.0.0.1');
+server.on('error', onError);
+server.on('listening', onListening);
+
+// Função para normalizar a porta
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // Nome do pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // Número da porta
+    return port;
+  }
+
+  return false;
+}
+
+// Manipula erros do servidor HTTP
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Porta ' + port;
+
+  // Manipula erros específicos com mensagens amigáveis
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requer privilégios elevados');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' já está em uso');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+// Manipula o evento de "escuta" do servidor HTTP
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'porta ' + addr.port;
+  debug('Escutando em ' + bind);
+  console.log('Webservice em execução em: ' + JSON.stringify(addr));
+}
